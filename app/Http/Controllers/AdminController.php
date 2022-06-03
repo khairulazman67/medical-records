@@ -9,9 +9,17 @@ use App\Models\Rekammedis;
 
 class AdminController extends Controller
 {
+    public function __construct()
+	{
+		date_default_timezone_set('Asia/Jakarta');
+	}
     public function index(){
         $rekammedis= Rekammedis::orderBy('created_at')->paginate(10);
-        return view('beranda',['rekammedis'=>$rekammedis]);
+        $jumlahpasien = Patients::count();
+        // dd(date("Y-m-d"));
+        $pasienhariini = Rekammedis::whereDate('created_at',date("Y-m-d"))->count();
+        // dd($pasienhariini);
+        return view('beranda',['rekammedis'=>$rekammedis,'jumlahpasien'=>$jumlahpasien,'pasienhariini'=>$pasienhariini]);
 
         // return view('beranda');
     }
@@ -153,6 +161,14 @@ class AdminController extends Controller
             return view('caripasien',['pasien'=>$rekammedis])->with('success', 'Data tidak ditemukan');
         }else{
             return view('caripasien',['pasien'=>$rekammedis])->with('failed', 'Data tidak ditemukan');
+        }
+    }
+    public function hapusrekammedis($id){
+        $delete = DB::table('rekammedis')->where('id','=',$id)->delete();
+        if($delete){
+            return redirect('/')->with('success', 'Data berhasil dihapus');
+        }else{
+            return redirect('/')->with('failed', 'Terjadi kesalahan saat penghapusan data ');
         }
     }
 

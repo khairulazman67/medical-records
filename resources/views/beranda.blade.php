@@ -81,8 +81,8 @@
                 <h1 class="text-white font-semibold text-2xl">Pasien Hari ini</h1>
                 <div class="w-auto h-[3px] bg-white rounded-xl mt-2"></div>
                 <div class="text-white text-2xl mt-2">
-                    <i class="fa-solid fa-users"></i>
-                    <p class="inline font-semibold">10 Orang</p>
+                    <i class="fa-solid fa-hospital-user"></i>
+                    <p class="inline font-semibold">{{$pasienhariini}} Orang</p>
                 </div>
             </div>
 
@@ -90,8 +90,8 @@
                 <h1 class="text-white font-semibold text-2xl">Pasien Terdaftar</h1>
                 <div class="w-auto h-[3px] bg-white rounded-xl mt-2"></div>
                 <div class="text-white text-2xl mt-2">
-                    <i class="fa-solid fa-hospital-user"></i>
-                    <p class="inline font-semibold">10 Unit</p>
+                    <i class="fa-solid fa-users"></i>
+                    <p class="inline font-semibold">{{$jumlahpasien}} Orang</p>
                 </div>
             </div>
             <div class="bg-primary-800 w-full rounded-xl shadow-lg shadow-gray-400 py-10 px-7 text-lg ">
@@ -243,7 +243,7 @@
                                             Edit
                                         </button>
                                         </form>
-                                        <form action="{{url('tangkapan/')}}" method="post"
+                                        <form action="{{url('rekammedis/'.$dat->id)}}" method="post"
                                         onsubmit="return confirm('Apakah anda ingin melanjutkan penghapusan data?')">
                                         @method('delete')
                                         @csrf

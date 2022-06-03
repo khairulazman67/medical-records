@@ -26,7 +26,7 @@
         
         <div class="w-full h-auto shadow-xl shadow-gray-400 mt-10 rounded-xl">
             <div class="bg-secondary-900 rounded-t-xl px-10 py-3">
-                <h1 class="font-bold text-white text-xl">Data Nelayan </h1>
+                <h1 class="font-bold text-white text-xl">Data Pasien </h1>
             </div>
             {{-- Message --}}
             @if (session()->has('success'))

@@ -12,7 +12,7 @@
         <!-- tulisan atas -->
         <div class="mt-16">
             <div class="flex justify-center text-white font-bold text-4xl bg-secondary-900 rounded-3xl mx-28 mb-10 py-4">
-                SISTEM PENDATAAN NELAYAN
+                Sistem Pencatatan Rekam Medis
             </div>
         </div>
         <div class="flex mx-44 relative">

@@ -29,5 +29,6 @@ Route::middleware(['auth'])->group(function () {
         return view('caripasien');
     });
     Route::post('/caripasien',[AdminController::class,'caripasien']);
+    Route::delete('/rekammedis/{id}',[AdminController::class,'hapusrekammedis']);
 });
 require __DIR__.'/auth.php';
