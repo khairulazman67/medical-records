@@ -17,7 +17,7 @@
         <div class="w-full  relative">
             <div class="mt-4">
                 <div class="flex justify-center text-white font-bold text-4xl bg-secondary-900 rounded-3xl  mb-5 py-3">
-                    Sistem Pencatatan Rekam Medis
+                    Sistem Pencatatan Rekam Medis Puskesmas Nibong
                 </div>
             </div>
             <div class="bg-primary-700 h-2 "></div>
@@ -192,6 +192,7 @@
                                                 {{-- </form> --}}
                                                 <form action="{{url('pasien/'.$dat->NIK)}}" method="post"
                                                     onsubmit="return confirm('Apakah anda ingin melanjutkan penghapusan data?')">
+                                                    <input type="hidden" name="no_BPJS" value="{{$dat->no_BPJS}}">
                                                     @method('delete')
                                                     @csrf
                                                     <button

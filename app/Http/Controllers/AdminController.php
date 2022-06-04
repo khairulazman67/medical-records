@@ -63,13 +63,20 @@ class AdminController extends Controller
             
         } 
     }
-    public function hapusdatapasien( $NIK){
-        $delete = DB::table('patients')->where('NIK','=',$NIK)->delete();
-        if($delete){
-            return redirect('/datapasien')->with('success', 'Data pasien berhasil dihapus');
+    public function hapusdatapasien(Request $request, $NIK){
+        // dd($request);
+        $cekdata = Rekammedis::where('no_BPJS',$request->no_BPJS)->first();
+        if($cekdata){
+            return redirect('/datapasien')->with('failed', 'Terdapat rekam medis yang terdaftar');
         }else{
-            return redirect('/datapasien')->with('failed', 'Terjadi kesalahan saat penghapusan data pasien');
+            $delete = DB::table('patients')->where('NIK','=',$NIK)->delete();
+            if($delete){
+                return redirect('/datapasien')->with('success', 'Data pasien berhasil dihapus');
+            }else{
+                return redirect('/datapasien')->with('failed', 'Terjadi kesalahan saat penghapusan data pasien');
+            }
         }
+
     }
 
     public function editdatapasien($NIK){
