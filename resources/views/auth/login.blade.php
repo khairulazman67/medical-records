@@ -27,8 +27,8 @@
                     @csrf
                         <div>
                             <div class="text-xl">
-                                <label for="fname" class="font-semibold  text-xl">Email :</label><br>
-                                <input type="email" :value="old('email')" id="email" name="email" class="border-2 rounded-lg border-primary-800 hover:border-primary-900 h-10 w-96 p-5"><br>
+                                <label for="fname" class="font-semibold  text-xl">Email/Nama :</label><br>
+                                <input type="text"  id="login" name="login" class="border-2 rounded-lg border-primary-800 hover:border-primary-900 h-10 w-96 p-5"><br>
                             </div>
                             <div class="mt-4  text-xl">
                                 <label for="fname" class="font-semibold ">Password :</label><br>
