@@ -38,13 +38,13 @@
                                 Login
                             </button>
                         </div>
-                        
+
                         <div class="absolute inset-y-0 -right-5">
                             <img src="{{asset('img/ILUS.png') }}" alt="" class="mt-11 ml-8 w-[550px]">
-                        </div>  
+                        </div>
                 </form>
             </div>
-            
+
         </div>
     </div>
 </body>
