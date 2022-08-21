@@ -29,7 +29,7 @@
                 'Desember'
             );
             $pecahkan = explode('-', $tanggal);
-            
+
             // variabel pecahkan 0 = tanggal
             // variabel pecahkan 1 = bulan
             // variabel pecahkan 2 = tahun
@@ -40,7 +40,7 @@
                 case 'Sun':
                     $hari_ini = "Minggu";
                 break;
-                case 'Mon':			
+                case 'Mon':
                     $hari_ini = "Senin";
                 break;
                 case 'Tue':
@@ -59,7 +59,7 @@
                     $hari_ini = "Sabtu";
                 break;
                 default:
-                    $hari_ini = "Tidak di ketahui";		
+                    $hari_ini = "Tidak di ketahui";
                 break;
             }
             return  $hari_ini ;
@@ -124,7 +124,9 @@
             @endif
 
             <div class="my-5 pb-5 flex flex-col justify-center">
+
                 <div class="flex justify-center">
+
                     <form action="{{url('simpanrekammedis')}}" method="post" class="w-full max-w-2xl">
                         @csrf
                         <div class="flex -mx-4 mb-2">
@@ -133,9 +135,14 @@
                                     for="grid-city">
                                     Kode BPJS
                                 </label>
-                                <input type="text" name="no_BPJS"
-                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    id="grid-city" type="text" placeholder="Kode BPJS" required>
+
+                                <select required name="no_BPJS" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" >
+                                    <label>Kelas :</label><br>
+                                    <option>-- Kode BPJS --</option>
+                                    @foreach ($pasien as $i=>$dat)
+                                        <option value="{{$dat->no_BPJS}}">{{$dat->nama}} ({{$dat->no_BPJS}})</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="w-40 px-3 mb-6 md:mb-0">
@@ -176,7 +183,7 @@
                         </div>
                     </form>
                 </div>
-                
+
                 <div class="flex justify-center mx-auto mt-3">
                     <div class="w-full">
                         <div class="border-b border-gray-200 shadow ">
@@ -233,13 +240,13 @@
                                         <button
                                             class="px-6 py-1 text-sm text-white bg-yellow-400 hover:bg-yellow-500 rounded-lg"
                                             type="button" onclick="toggleModal('modal-edit')" id="edit"
-                                            data-target="#modal-edit" data-whatever="@mdo" 
+                                            data-target="#modal-edit" data-whatever="@mdo"
                                             data-id="{{$dat->id}}"
-                                            data-nama="{{$dat->patients->nama}}" 
+                                            data-nama="{{$dat->patients->nama}}"
                                             data-keluhan="{{$dat->keluhan}}"
                                             data-poliklinik="{{$dat->poliklinik}}"
                                             >
-                                            
+
                                             Edit
                                         </button>
                                         </form>
@@ -313,7 +320,7 @@
                                     </select>
                                 </div>
                             </div>
-                            
+
                             <div class="relative z-0 w-full mb-6 group">
                                 <input type="text" name="keluhan" id="keluhan" value="keluhan"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-primary-900 peer"

@@ -22,12 +22,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pasien/{NIK}',[AdminController::class,'editdatapasien']);
     Route::post('/editpasien',[AdminController::class,'proseditdatapasien']);
     Route::post('/simpanrekammedis',[AdminController::class,'simpanrekammedis']);
-    
+
     Route::post('/editrekammedis',[AdminController::class,'editrekammedis']);
 
-    Route::get('/caripasien',function(){
-        return view('caripasien');
-    });
+    Route::get('/caripasien',[AdminController::class,'caripasien']);
+
+    Route::post('/printreport',[AdminController::class,'printReport']);
     Route::post('/caripasien',[AdminController::class,'caripasien']);
     Route::delete('/rekammedis/{id}',[AdminController::class,'hapusrekammedis']);
 });

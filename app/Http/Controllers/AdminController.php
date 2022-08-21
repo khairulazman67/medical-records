@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Models\Patients;
 use App\Models\Rekammedis;
+use PDF;
 
 class AdminController extends Controller
 {
@@ -18,8 +20,9 @@ class AdminController extends Controller
         $jumlahpasien = Patients::count();
         // dd(date("Y-m-d"));
         $pasienhariini = Rekammedis::whereDate('created_at',date("Y-m-d"))->count();
+        $pasien = Patients::get();
         // dd($pasienhariini);
-        return view('beranda',['rekammedis'=>$rekammedis,'jumlahpasien'=>$jumlahpasien,'pasienhariini'=>$pasienhariini]);
+        return view('beranda',['pasien'=>$pasien,'rekammedis'=>$rekammedis,'jumlahpasien'=>$jumlahpasien,'pasienhariini'=>$pasienhariini]);
 
         // return view('beranda');
     }
@@ -29,6 +32,7 @@ class AdminController extends Controller
     }
     public function tambahdatapasien(Request $request){
         // dd($request);
+
         $request->validate(
             [
                 'NIK' => 'required',
@@ -60,8 +64,8 @@ class AdminController extends Controller
             }else{
                 return redirect('/datapasien')->with('failed', 'Terjadi kesalahan saat menyimpan data pasien');
             }
-            
-        } 
+
+        }
     }
     public function hapusdatapasien(Request $request, $NIK){
         // dd($request);
@@ -80,12 +84,12 @@ class AdminController extends Controller
     }
 
     public function editdatapasien($NIK){
-        
+
         $pasien = Patients::where('NIK',$NIK)->first();
         // dd($nelayan);
         return view('/editpasien',['pasien'=>$pasien]);
     }
-    
+
     public function proseditdatapasien(Request $request){
         // dd($request->NIK);
         $request->validate(
@@ -114,9 +118,9 @@ class AdminController extends Controller
                     return redirect('/datapasien')->with('failed', 'Terjadi kesalahan saat update data pasien');
                 }
             }catch(Exception $e){
-                return redirect('/datapasien')->with('failed', 'NIK atau No BPJS sudah digunakan'); 
+                return redirect('/datapasien')->with('failed', 'NIK atau No BPJS sudah digunakan');
             }
-            
+
     }
     public function simpanrekammedis(Request $request){
         // dd($request);
@@ -160,15 +164,56 @@ class AdminController extends Controller
         // dd($pasien);
     }
     public function caripasien(Request $request){
-        // dd($request);
-        $rekammedis = Rekammedis::where('no_BPJS',$request->no_BPJS)->paginate(10);
-        // dd($rekammedis);
-        if($rekammedis){
+        // dd(count($request));
+        $allpasien = Patients::get();
+        // dd($allpasien);
 
-            return view('caripasien',['pasien'=>$rekammedis])->with('success', 'Data tidak ditemukan');
-        }else{
-            return view('caripasien',['pasien'=>$rekammedis])->with('failed', 'Data tidak ditemukan');
+        if($request){
+            $old_request['no_BPJS']=$request->no_BPJS;
+            // dd($old_request);
+            $rekammedis = Rekammedis::where('no_BPJS',$request->no_BPJS)->paginate(10);
+            if($rekammedis){
+                return view('caripasien',['pasien'=>$rekammedis, 'allpasien'=>$allpasien, 'old_request'=>$old_request])->with('success', 'Data berhasil didapat');
+            }else{
+                return view('caripasien',['pasien'=>$rekammedis, 'allpasien'=>$allpasien, 'old_request'=>$old_request])->with('failed', 'Data tidak ditemukan');
+            }
         }
+        return view('caripasien',['allpasien'=>$allpasien]);
+        // dd($rekammedis);
+    }
+    public function printReport(Request $request){
+        $allpasien = Patients::get();
+        // dd($request);
+        $old_request['tahun']=$request->tahun;
+
+        $val = Validator::make(
+            $request->all(),
+            [
+                'no_BPJS' => 'required',
+            ]
+        );
+        // dd($request);
+        if ($val->fails() || $request->no_BPJS=="null") {
+            // dd('salah');
+            $rekammedis = Rekammedis::where('no_BPJS',$request->no_BPJS)->paginate(10);
+            $old_request['no_BPJS']=$request->no_BPJS;
+            return view('caripasien',['pasien'=>$rekammedis, 'allpasien'=>$allpasien, 'old_request'=>$old_request])->with('failed', 'Data tidak ditemukan');
+        }
+        // dd($rekammedis);
+        $rekammedis = Rekammedis::where('no_BPJS',$request->no_BPJS)->get();
+
+        $pdf = PDF::loadview('printReport',['pasien'=>$rekammedis])->setPaper('A4','potrait');
+            // return $pdf->stream();
+            $pdf->getDomPDF()->setHttpContext(
+            stream_context_create([
+                    'ssl' => [
+                        'allow_self_signed'=> TRUE,
+                        'verify_peer' => FALSE,
+                        'verify_peer_name' => FALSE,
+                    ]
+                ])
+            );
+            return $pdf->download('laporanPasien.pdf');
     }
     public function hapusrekammedis($id){
         $delete = DB::table('rekammedis')->where('id','=',$id)->delete();
